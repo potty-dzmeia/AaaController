@@ -1,0 +1,1 @@
+-add possibility to open comport with random name (used for network comports)

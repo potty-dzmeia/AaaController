@@ -1,0 +1,90 @@
+Here is how to move our jar and native libraries to the local repository 
+
+
+1) Pack the binary libraries in jar file
+---------------------------------------------------------------
+        
+   win32:
+   jar cvf rxtx-native-files-2.1.7.jar rxtxSerial.dll
+   
+   win64:
+   jar cvf rxtx-native-files-2.1.7.jar rxtxSerial.dll
+   
+   linux_x86:
+   jar cvf rxtx-native-files-2.1.7.jar librxtxSerial.so
+   
+   linux_x86_64:
+   jar cvf rxtx-native-files-2.1.7.jar librxtxSerial.so
+   
+   linux_ia64:
+   jar cvf rxtx-native-files-2.1.7.jar librxtxSerial.so
+   
+   mac_os_x:
+   jar cvf rxtx-native-files-2.1.7.jar librxtxSerial.jnilib 
+   
+   
+2) Deploy the binary libraries to our repository using classifier
+---------------------------------------------------------------
+
+    win32:
+    mvn deploy:deploy-file -Durl=file:///home/chavdar/Development/hamProjects/DLineController/repository/ \
+                           -DgroupId=org.lz1aq \
+                           -DartifactId=rxtx-native-files \
+                           -Dversion=2.1.7 \
+                           -Dpackaging=jar \
+                           -Dfile=rxtx-native-files-2.1.7.jar\
+                           -Dclassifier=win32 
+   
+    win64:
+    mvn deploy:deploy-file -Durl=file:///home/chavdar/Development/hamProjects/DLineController/repository/ \
+                           -DgroupId=org.lz1aq \
+                           -DartifactId=rxtx-native-files \
+                           -Dversion=2.1.7 \
+                           -Dpackaging=jar \
+                           -Dfile=rxtx-native-files-2.1.7.jar\
+                           -Dclassifier=win64 
+    
+    linux_x86:
+    mvn deploy:deploy-file -Durl=file:///home/chavdar/Development/hamProjects/DLineController/repository/ \
+                           -DgroupId=org.lz1aq \
+                           -DartifactId=rxtx-native-files \
+                           -Dversion=2.1.7 \
+                           -Dpackaging=jar \
+                           -Dfile=rxtx-native-files-2.1.7.jar\
+                           -Dclassifier=linux_x86 
+    
+    linux_x86_64:
+    mvn deploy:deploy-file -Durl=file:///home/chavdar/Development/hamProjects/DLineController/repository/ \
+                           -DgroupId=org.lz1aq \
+                           -DartifactId=rxtx-native-files \
+                           -Dversion=2.1.7 \
+                           -Dpackaging=jar \
+                           -Dfile=rxtx-native-files-2.1.7.jar\
+                           -Dclassifier=linux_x86_64 
+                           
+    linux_ia64:
+    mvn deploy:deploy-file -Durl=file:///home/chavdar/Development/hamProjects/DLineController/repository/ \
+                           -DgroupId=org.lz1aq \
+                           -DartifactId=rxtx-native-files \
+                           -Dversion=2.1.7 \
+                           -Dpackaging=jar \
+                           -Dfile=rxtx-native-files-2.1.7.jar\
+                           -Dclassifier=linux_ia64 
+    
+    mac_os_x:
+    mvn deploy:deploy-file -Durl=file:///home/chavdar/Development/hamProjects/DLineController/repository/ \
+                           -DgroupId=org.lz1aq \
+                           -DartifactId=rxtx-native-files \
+                           -Dversion=2.1.7 \
+                           -Dpackaging=jar \
+                           -Dfile=rxtx-native-files-2.1.7.jar\
+                           -Dclassifier=mac_os_x 
+    
+3) Deploy the jar libraries our repository 
+---------------------------------------------------------------
+    mvn deploy:deploy-file -Durl=file:///home/chavdar/Development/hamProjects/DLineController/repository/ \
+                           -DgroupId=org.lz1aq \
+                           -DartifactId=rxtx \
+                           -Dversion=2.1.7 \
+                           -Dpackaging=jar \
+                           -Dfile=RXTXcomm.jar
