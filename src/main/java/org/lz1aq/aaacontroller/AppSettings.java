@@ -1,6 +1,5 @@
 package org.lz1aq.aaacontroller;
 
-
 import java.awt.Rectangle;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -10,7 +9,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
-
 /**
  *
  * @author Chavdar
@@ -18,60 +16,64 @@ import java.util.logging.Logger;
 public final class AppSettings 
 {
     static final String SETTINGS_FILE_NAME          = "Settings.properties";
-    static final String PROPERTY_DEVICE_ID          = "deviceId";
-    static final String PROPERTY_COMPORT            = "comPort";
-    static final String PROPERTY_BAUDE_RATE         = "baudRate";
-    static final String PROPERTY_MAIN_WINDOW_X      = "x";
-    static final String PROPERTY_MAIN_WINDOW_Y      = "y";
-    static final String PROPERTY_MAIN_WINDOW_WIDTH  = "w";
-    static final String PROPERTY_MAIN_WINDOW_HEIGHT = "h";
-    static final String PROPERTY_LABEL_ANT1         = "ant1";
-    static final String PROPERTY_LABEL_ANT2         = "ant2";
-    static final String PROPERTY_LABEL_ANT3         = "ant3";
-    static final String PROPERTY_LABEL_ANT4         = "ant4"; 
-
-    private String  deviceId;   // This is used when composing the command send thru the serial interface
-    private String  comPort;
-    private String  baudRate;
-    private String  labelAnt1;
-    private String  labelAnt2;
-    private String  labelAnt3;
-    private String  labelAnt4;
-    private Rectangle jFrameDimensions; // JFrame settings: position and size
+    
+    static final int ANTENNA_COUNT = 4; // The number of antennas
+    
+    // List of properties that are going to be saved in a file
+    static final String PROP_DEVICE_ID          = "deviceId";
+    static final String PROP_COMPORT            = "comPort";
+    static final String PROP_BAUDE_RATE         = "baudRate";
+    static final String PROP_MAIN_WINDOW_X      = "x";
+    static final String PROP_MAIN_WINDOW_Y      = "y";
+    static final String PROP_MAIN_WINDOW_WIDTH  = "w";
+    static final String PROP_MAIN_WINDOW_HEIGHT = "h";
+    
+    static final String PROP_ANTENNA_NAME       = "antenna_name";
+    static final String PROP_ANTENNA_SWITCHING_PERIOD  = "antenna_period";
+    static final String PROP_ANTENNA_IS_CYCLED  = "atenna_is_cycled";
+    static final String PROP_LAST_USED_ANTENNA  = "last_used_antenna";
+    
+    
+    private String    comPort;
+    private String    baudRate;
+    private String[]  antennaName;            
+    private String[]  antennaSwitchingPeriod; // String keeping integer
+    private String[]  isAntennaCycled;        // String keeping boolean
+    private int       lastUsedAntenna;  // A number from 1 to 4
+   
+    private Rectangle mainWindowDimensions; // JFrame position and size
+ 
     
     private final Properties prop;
     
     
     
     /**
-     * Tries to read the settings from the disk. If it fails default values are used.
+     * Constructor 
+     * 
+     * - tries to read the settings from the disk. If it fails default values are used.
      */
     public AppSettings()
-    {     
-        this.prop        = new Properties();
-        jFrameDimensions = new Rectangle();
-        this.LoadSettingsFromDisk();
+    { 
+      antennaName            = new String[ANTENNA_COUNT];
+      isAntennaCycled        = new String[ANTENNA_COUNT];
+      antennaSwitchingPeriod = new String[ANTENNA_COUNT];
+      
+      this.prop            = new Properties();
+      mainWindowDimensions = new Rectangle();
+      
+      this.LoadSettingsFromDisk();
     }
-
-    
-    public String getDeviceId()
-    {
-        return deviceId;
-    }
-
-    public void setDeviceId(String deviceId)
-    {
-        this.deviceId = deviceId;
-    }
+ 
     
     public Rectangle getJFrameDimensions()
     {
-        return jFrameDimensions;
+        return mainWindowDimensions;
     }
 
     public void setJFrameDimensions(Rectangle jFrameDimensions)
     {
-        this.jFrameDimensions = jFrameDimensions;
+        this.mainWindowDimensions = jFrameDimensions;
     }
 
     public String getComPort()
@@ -94,40 +96,69 @@ public final class AppSettings
         this.baudRate = baudRate;
     }   
     
-    public void setLabelAnt1(String labelAnt1)
+    public void setAntennaLabel(int antennaIndex, String antLabel)
     {
-      this.labelAnt1 = labelAnt1;
-    }
-    public String getLabelAnt1()
-    {
-      return labelAnt1;
+      this.antennaName[antennaIndex] = antLabel;
     }
     
-    public void setLabelAnt2(String labelAnt2)
+    public String getAntennaLabel(int antennaIndex)
     {
-      this.labelAnt2 = labelAnt2;
-    }
-    public String getLabelAnt2()
-    {
-      return labelAnt2;
+      return antennaName[antennaIndex];
     }
     
-    public void setLabelAnt3(String labelAnt3)
+    public void setLastUsedAntenna(int antennaNumber)
     {
-      this.labelAnt3 = labelAnt3;
-    }
-    public String getLabelAnt3()
-    {
-      return labelAnt3;
+      lastUsedAntenna = antennaNumber;
     }
     
-    public void setLabelAnt4(String labelAnt4)
+    public int getLastUsedAntenna()
     {
-      this.labelAnt4 = labelAnt4;
+      return lastUsedAntenna;
     }
-    public String getLabelAnt4()
+     
+    public void setAntennaSwitchingPeriod(int antennaIndex, int periodInMs)
     {
-      return labelAnt4;
+      antennaSwitchingPeriod[antennaIndex] = Integer.toString(periodInMs);
+    }
+    
+    public int getAntennaSwitchingPeriod(int antennaIndex)
+    {
+      return Integer.parseInt(antennaSwitchingPeriod[antennaIndex]);
+    }
+    
+    public void setIsAntennaCycled(int antennaIndex, boolean isCycled)
+    {
+      isAntennaCycled[antennaIndex] = Boolean.toString(isCycled);
+    }   
+    
+    public boolean getIsAntennaCycled(int antennaIndex)
+    {
+      return Boolean.parseBoolean(isAntennaCycled[antennaIndex]);
+    }
+    
+    
+    /**
+     * Stores the array of values into properties which are named using
+     * key+index of the value
+     * 
+     * @param key 
+     * @param values 
+     */
+    private void setAntProperties(String key, String[] values)
+    {
+      for(int i=0; i<values.length; i++)
+      {
+        prop.setProperty(key+i, values[i]);
+      }
+    }
+    
+    
+    private void getAntProperties(String key, String[] values)
+    {
+      for(int i=0; i<values.length; i++)
+      {
+        values[i] = prop.getProperty(key+i);
+      }
     }
     
     /**
@@ -136,21 +167,24 @@ public final class AppSettings
     public void SaveSettingsToDisk()
     {
         // Store last used antenna and direction:
-        prop.setProperty(PROPERTY_DEVICE_ID, deviceId);
-        prop.setProperty(PROPERTY_COMPORT, comPort);
-        prop.setProperty(PROPERTY_BAUDE_RATE, baudRate);
+        prop.setProperty(PROP_COMPORT, comPort);
+        prop.setProperty(PROP_BAUDE_RATE, baudRate);
      
         // Now save the JFrame dimensions:
-        prop.setProperty(PROPERTY_MAIN_WINDOW_X, Integer.toString(jFrameDimensions.x));
-        prop.setProperty(PROPERTY_MAIN_WINDOW_Y, Integer.toString(jFrameDimensions.y));
-        prop.setProperty(PROPERTY_MAIN_WINDOW_WIDTH, Integer.toString(jFrameDimensions.width));
-        prop.setProperty(PROPERTY_MAIN_WINDOW_HEIGHT, Integer.toString(jFrameDimensions.height));
+        prop.setProperty(PROP_MAIN_WINDOW_X, Integer.toString(mainWindowDimensions.x));
+        prop.setProperty(PROP_MAIN_WINDOW_Y, Integer.toString(mainWindowDimensions.y));
+        prop.setProperty(PROP_MAIN_WINDOW_WIDTH, Integer.toString(mainWindowDimensions.width));
+        prop.setProperty(PROP_MAIN_WINDOW_HEIGHT, Integer.toString(mainWindowDimensions.height));
         
-        // Texts for antena types
-        prop.setProperty(PROPERTY_LABEL_ANT1, labelAnt1);
-        prop.setProperty(PROPERTY_LABEL_ANT2, labelAnt2);
-        prop.setProperty(PROPERTY_LABEL_ANT3, labelAnt3);
-        prop.setProperty(PROPERTY_LABEL_ANT4, labelAnt4);
+        // Antenna names
+        setAntProperties(PROP_ANTENNA_NAME, antennaName);
+        // Switching periods for the antennas
+        setAntProperties(PROP_ANTENNA_SWITCHING_PERIOD, antennaSwitchingPeriod);
+        // isCycled for each antenna
+        setAntProperties(PROP_ANTENNA_IS_CYCLED, isAntennaCycled);
+        // Last used antenna
+        prop.setProperty(PROP_LAST_USED_ANTENNA, Integer.toString(lastUsedAntenna));
+        
         
         try
         {
@@ -170,45 +204,32 @@ public final class AppSettings
     {
         try
         {
-            
             prop.load(new FileInputStream(SETTINGS_FILE_NAME));
             
-            deviceId = prop.getProperty(PROPERTY_DEVICE_ID);
-            if(deviceId == null)
-                throwMissingPropertyException(PROPERTY_DEVICE_ID);
-            
-            comPort  = prop.getProperty(PROPERTY_COMPORT);
+            // CommPort
+            comPort  = prop.getProperty(PROP_COMPORT);
             if(comPort == null)
-                throwMissingPropertyException(PROPERTY_COMPORT);
-                
-            baudRate = prop.getProperty(PROPERTY_BAUDE_RATE);
+                throwMissingPropertyException(PROP_COMPORT);
+            baudRate = prop.getProperty(PROP_BAUDE_RATE);
             if(baudRate == null)
-                throwMissingPropertyException(PROPERTY_BAUDE_RATE);    
+                throwMissingPropertyException(PROP_BAUDE_RATE);    
             
-            
-            // Read the JFrame dimensions:
-            int x = Integer.parseInt(prop.getProperty(PROPERTY_MAIN_WINDOW_X));
-            int y = Integer.parseInt(prop.getProperty(PROPERTY_MAIN_WINDOW_Y));
-            int w = Integer.parseInt(prop.getProperty(PROPERTY_MAIN_WINDOW_WIDTH));
-            int h = Integer.parseInt(prop.getProperty(PROPERTY_MAIN_WINDOW_HEIGHT));
-            
-            this.jFrameDimensions = new Rectangle(x,y,w,h);
+            // JFrame dimensions:
+            int x = Integer.parseInt(prop.getProperty(PROP_MAIN_WINDOW_X));
+            int y = Integer.parseInt(prop.getProperty(PROP_MAIN_WINDOW_Y));
+            int w = Integer.parseInt(prop.getProperty(PROP_MAIN_WINDOW_WIDTH));
+            int h = Integer.parseInt(prop.getProperty(PROP_MAIN_WINDOW_HEIGHT));   
+            this.mainWindowDimensions = new Rectangle(x,y,w,h);
     
+            // Antenna names
+            getAntProperties(PROP_ANTENNA_NAME, antennaName);
+            // Switching periods for the antennas
+            getAntProperties(PROP_ANTENNA_SWITCHING_PERIOD, antennaSwitchingPeriod);
+            // isCycled for each antenna
+            getAntProperties(PROP_ANTENNA_IS_CYCLED, isAntennaCycled);
+            // Last used antenna
+            lastUsedAntenna = Integer.parseInt(prop.getProperty(PROP_LAST_USED_ANTENNA));
             
-            //Read the antenna type texts
-            labelAnt1  = prop.getProperty(PROPERTY_LABEL_ANT1);
-            if(labelAnt1 == null)
-                throwMissingPropertyException(PROPERTY_LABEL_ANT1);
-            labelAnt2 = prop.getProperty(PROPERTY_LABEL_ANT2);
-            if(labelAnt2 == null)
-                throwMissingPropertyException(PROPERTY_LABEL_ANT2);
-            labelAnt3 = prop.getProperty(PROPERTY_LABEL_ANT3);
-            if(labelAnt3 == null)
-                throwMissingPropertyException(PROPERTY_LABEL_ANT3);
-            labelAnt4 = prop.getProperty(PROPERTY_LABEL_ANT4);
-            if(labelAnt4 == null)
-                throwMissingPropertyException(PROPERTY_LABEL_ANT4);
-                    
         } catch (IOException ex)
         {
             // If some error we will set to default values
@@ -234,22 +255,36 @@ public final class AppSettings
      */
     private void SetSettingsToDefault()
     {
-        deviceId = "0";
+        // CommPort
         comPort = "";
         baudRate = "2400";         
         
         // We have minimum size so we don't have to worry about the values:
-        jFrameDimensions.height = 0;
-        jFrameDimensions.width = 0;
-        jFrameDimensions.x = 0;
-        jFrameDimensions.y = 0;
+        mainWindowDimensions.height = 0;
+        mainWindowDimensions.width = 0;
+        mainWindowDimensions.x = 0;
+        mainWindowDimensions.y = 0;
         
-        // Set texts for the antenna types
-        labelAnt1 = "A Loop";
-        labelAnt2 = "B Loop";
-        labelAnt3 = "Dipole";
-        labelAnt4 = "X Loop";
+        // Antenna names
+        antennaName[0] = "A Loop";
+        antennaName[1] = "B Loop";
+        antennaName[2] = "Dipole";
+        antennaName[3] = "X Loop";
                 
+        // Switching periods
+        for(int i=0; i<antennaSwitchingPeriod.length; i++)
+        {
+          antennaSwitchingPeriod[i] = Integer.toString(App.DEFAULT_SWITCHING_PERIOD_IN_MS);
+        }
+        
+        // isAntennaCycled
+        for(int i=0; i<isAntennaCycled.length; i++)
+        {
+          isAntennaCycled[i] = Boolean.toString(true);
+        }
+         
+        // Last active antenna
+        lastUsedAntenna = 1;
     }
     
     void throwMissingPropertyException(String propertyName) throws Exception

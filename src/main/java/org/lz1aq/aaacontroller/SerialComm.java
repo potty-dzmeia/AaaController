@@ -19,11 +19,10 @@ import jssc.SerialPortException;
  */
 public class SerialComm
 {
-
     private SerialPort serialPort = null;
     private String serialPortName = null;
-    private int baudRate;
 
+    
     /**
      * @return Returns a new DefaultComboBoxModel containing all available COM
      * ports
@@ -33,46 +32,38 @@ public class SerialComm
         String[] portNames = SerialPortList.getPortNames();
         return new DefaultComboBoxModel(portNames);
     }
+    
 
-    /**
-     * Sends command to the DLine Controller device
-     *
-     * @param portName
-     * @param baudRate
-     * @param deviceId
-     * @param command
-     * @throws Exception
-     */
-    public void sendCommand(String portName,
-                            int baudRate,
-                            byte deviceId,
-                            byte command) throws Exception
+    public void open(String portName)
     {
-
-        // If no comm port has ben yet opened
-        if(serialPort == null)
+        // First try to close currently open CommPort
+        if(serialPort != null)
         {
-            System.out.println("First time opening commPort");
-            this.open(portName, baudRate);
+            try
+            {
+                serialPort.closePort();
+            }
+            catch(SerialPortException ex)
+            {
+                Logger.getLogger(SerialComm.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-        // If another port needs to be used
-        else if(portName.compareTo(this.serialPortName) != 0)
+         
+        serialPortName = portName;
+
+        serialPort = new SerialPort(serialPortName);
+        try
         {
-            System.out.println("Opening another commPort");
-            this.close();
-            this.open(portName, baudRate);
+            serialPort.openPort();
+        }
+        catch(SerialPortException ex)
+        {
+            Logger.getLogger(SerialComm.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        if(this.baudRate != baudRate)
-        {
-            this.setBaudRate(baudRate);
-        }
-
-        serialPort.writeByte((byte) (128 + deviceId)); // Each command for the DLine controller should be preceeded by 0x80
-        serialPort.writeByte(command);      // Send the actual command
-        serialPort.purgePort(SerialPort.PURGE_TXCLEAR);
     }
-
+   
+    
     public void close()
     {
         if(serialPort != null)
@@ -87,29 +78,61 @@ public class SerialComm
             }
         }
     }
-
-    private void open(String portName, int baudRate)
+      
+    
+    /**
+     * Sends command to the serial port to activate certain antenna.
+     * 
+     * @param ant Value of ANT_1 to ANT_4
+     */
+    public void setAntenna(int ant)
     {
-        serialPortName = portName;
-
-        serialPort = new SerialPort(serialPortName);
+        if(serialPort == null)
+        {
+            System.err.println("Open come port first!");
+        }
+        /* The following commands are sent to the CommPort depending on the ant
+                      DTR | RTS
+                     -----|-----
+        ANT_1(A Loop)  0  |  0
+        ANT_2(B Loop)  1  |  0
+        ANT_3(Dipole)  0  |  1
+        ANT_4(X Loop)  1  |  1
+        */
         try
         {
-            serialPort.openPort();
-        }
+            switch(ant)
+            {
+                case App.ANT_1:
+                    serialPort.setDTR(false);
+                    serialPort.setRTS(false);
+                    break;
+
+                case App.ANT_2:
+                    serialPort.setDTR(true);
+                    serialPort.setRTS(false);
+                    break;
+
+                case App.ANT_3:
+                    serialPort.setDTR(false);
+                    serialPort.setRTS(true);
+                    break;
+
+                case App.ANT_4:
+                    serialPort.setDTR(true);
+                    serialPort.setRTS(true);
+                    break;
+            }
+        } 
         catch(SerialPortException ex)
         {
             Logger.getLogger(SerialComm.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
-
-    private void setBaudRate(int baudRate) throws SerialPortException
+        
+    
+    public String getName()
     {
-        serialPort.setParams(baudRate,
-                             SerialPort.DATABITS_8,
-                             SerialPort.STOPBITS_1,
-                             SerialPort.PARITY_NONE);
+        return serialPortName;
     }
-
 }
