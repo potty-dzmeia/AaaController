@@ -39,7 +39,7 @@ public final class AppSettings
     private String[]  antennaName;            
     private String[]  antennaSwitchingPeriod; // String keeping integer
     private String[]  isAntennaCycled;        // String keeping boolean
-    private int       lastUsedAntenna;  // A number from 1 to 4
+    private int       lastUsedAntenna;        // A number from 1 to 4
    
     private Rectangle mainWindowDimensions; // JFrame position and size
  
@@ -266,9 +266,9 @@ public final class AppSettings
         mainWindowDimensions.y = 0;
         
         // Antenna names
-        antennaName[0] = "A Loop";
-        antennaName[1] = "B Loop";
-        antennaName[2] = "Dipole";
+        antennaName[0] = "Dipole";
+        antennaName[1] = "A Loop";
+        antennaName[2] = "B Loop";
         antennaName[3] = "X Loop";
                 
         // Switching periods

@@ -94,9 +94,9 @@ public class SerialComm
         /* The following commands are sent to the CommPort depending on the ant
                       DTR | RTS
                      -----|-----
-        ANT_1(A Loop)  0  |  0
-        ANT_2(B Loop)  1  |  0
-        ANT_3(Dipole)  0  |  1
+        ANT_1(Dipole)  0  |  0
+        ANT_2(A Loop)  1  |  0
+        ANT_3(B Loop)  0  |  1
         ANT_4(X Loop)  1  |  1
         */
         try

@@ -14,7 +14,7 @@ public class App extends javax.swing.JFrame
 
     private static final long serialVersionUID = 1L;
 
-    static final int MIN_SWITCHING_PERIOD_IN_MS     = 200;
+    static final int MIN_SWITCHING_PERIOD_IN_MS     = 150;
     static final int DEFAULT_SWITCHING_PERIOD_IN_MS = 1000;
     static final int MAX_SWITCHING_PERIOD_IN_MS     = 60000;
     static final int ANT_1 = 0;
@@ -600,11 +600,11 @@ public class App extends javax.swing.JFrame
 
         buttonGroupAntennas.add(jToggleButtonAnt1);
         jToggleButtonAnt1.setText("Ant 1");
-        jToggleButtonAnt1.addActionListener(new java.awt.event.ActionListener()
+        jToggleButtonAnt1.addItemListener(new java.awt.event.ItemListener()
         {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
+            public void itemStateChanged(java.awt.event.ItemEvent evt)
             {
-                jToggleButtonAnt1ActionPerformed(evt);
+                jToggleButtonAnt1ItemStateChanged(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -616,11 +616,11 @@ public class App extends javax.swing.JFrame
 
         buttonGroupAntennas.add(jToggleButtonAnt2);
         jToggleButtonAnt2.setText("Ant 2");
-        jToggleButtonAnt2.addActionListener(new java.awt.event.ActionListener()
+        jToggleButtonAnt2.addItemListener(new java.awt.event.ItemListener()
         {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
+            public void itemStateChanged(java.awt.event.ItemEvent evt)
             {
-                jToggleButtonAnt2ActionPerformed(evt);
+                jToggleButtonAnt2ItemStateChanged(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -634,11 +634,11 @@ public class App extends javax.swing.JFrame
 
         buttonGroupAntennas.add(jToggleButtonAnt3);
         jToggleButtonAnt3.setText("Ant 3");
-        jToggleButtonAnt3.addActionListener(new java.awt.event.ActionListener()
+        jToggleButtonAnt3.addItemListener(new java.awt.event.ItemListener()
         {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
+            public void itemStateChanged(java.awt.event.ItemEvent evt)
             {
-                jToggleButtonAnt3ActionPerformed(evt);
+                jToggleButtonAnt3ItemStateChanged(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -652,11 +652,11 @@ public class App extends javax.swing.JFrame
 
         buttonGroupAntennas.add(jToggleButtonAnt4);
         jToggleButtonAnt4.setText("Ant 4");
-        jToggleButtonAnt4.addActionListener(new java.awt.event.ActionListener()
+        jToggleButtonAnt4.addItemListener(new java.awt.event.ItemListener()
         {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
+            public void itemStateChanged(java.awt.event.ItemEvent evt)
             {
-                jToggleButtonAnt4ActionPerformed(evt);
+                jToggleButtonAnt4ItemStateChanged(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -862,25 +862,37 @@ public class App extends javax.swing.JFrame
         storeSwitchingDialogParams();
     }//GEN-LAST:event_jButtonSetPeriodSwitchingActionPerformed
 
-    private void jToggleButtonAnt1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jToggleButtonAnt1ActionPerformed
-    {//GEN-HEADEREND:event_jToggleButtonAnt1ActionPerformed
-        serialComm.setAntenna(ANT_1);
-    }//GEN-LAST:event_jToggleButtonAnt1ActionPerformed
+    private void jToggleButtonAnt1ItemStateChanged(java.awt.event.ItemEvent evt)//GEN-FIRST:event_jToggleButtonAnt1ItemStateChanged
+    {//GEN-HEADEREND:event_jToggleButtonAnt1ItemStateChanged
+        if(jToggleButtonAnt1.isSelected())
+        {
+            serialComm.setAntenna(ANT_1);
+        }
+    }//GEN-LAST:event_jToggleButtonAnt1ItemStateChanged
 
-    private void jToggleButtonAnt2ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jToggleButtonAnt2ActionPerformed
-    {//GEN-HEADEREND:event_jToggleButtonAnt2ActionPerformed
-        serialComm.setAntenna(ANT_2);
-    }//GEN-LAST:event_jToggleButtonAnt2ActionPerformed
+    private void jToggleButtonAnt2ItemStateChanged(java.awt.event.ItemEvent evt)//GEN-FIRST:event_jToggleButtonAnt2ItemStateChanged
+    {//GEN-HEADEREND:event_jToggleButtonAnt2ItemStateChanged
+        if(jToggleButtonAnt1.isSelected())
+        {
+            serialComm.setAntenna(ANT_2);
+        }
+    }//GEN-LAST:event_jToggleButtonAnt2ItemStateChanged
 
-    private void jToggleButtonAnt3ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jToggleButtonAnt3ActionPerformed
-    {//GEN-HEADEREND:event_jToggleButtonAnt3ActionPerformed
-        serialComm.setAntenna(ANT_3);
-    }//GEN-LAST:event_jToggleButtonAnt3ActionPerformed
+    private void jToggleButtonAnt3ItemStateChanged(java.awt.event.ItemEvent evt)//GEN-FIRST:event_jToggleButtonAnt3ItemStateChanged
+    {//GEN-HEADEREND:event_jToggleButtonAnt3ItemStateChanged
+        if(jToggleButtonAnt1.isSelected())
+        {
+            serialComm.setAntenna(ANT_3);
+        }
+    }//GEN-LAST:event_jToggleButtonAnt3ItemStateChanged
 
-    private void jToggleButtonAnt4ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jToggleButtonAnt4ActionPerformed
-    {//GEN-HEADEREND:event_jToggleButtonAnt4ActionPerformed
-        serialComm.setAntenna(ANT_4);
-    }//GEN-LAST:event_jToggleButtonAnt4ActionPerformed
+    private void jToggleButtonAnt4ItemStateChanged(java.awt.event.ItemEvent evt)//GEN-FIRST:event_jToggleButtonAnt4ItemStateChanged
+    {//GEN-HEADEREND:event_jToggleButtonAnt4ItemStateChanged
+        if(jToggleButtonAnt1.isSelected())
+        {
+            serialComm.setAntenna(ANT_4);
+        }
+    }//GEN-LAST:event_jToggleButtonAnt4ItemStateChanged
 
     /**
      * @param args the command line arguments
