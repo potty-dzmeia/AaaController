@@ -20,7 +20,7 @@ import jssc.SerialPortException;
 public class SerialComm
 {
     private SerialPort serialPort = null;
-    private String serialPortName = null;
+    private String portName = null;
 
     
     /**
@@ -49,9 +49,9 @@ public class SerialComm
             }
         }
          
-        serialPortName = portName;
+        this.portName = portName;
 
-        serialPort = new SerialPort(serialPortName);
+        serialPort = new SerialPort(this.portName);
         try
         {
             serialPort.openPort();
@@ -83,56 +83,62 @@ public class SerialComm
     /**
      * Sends command to the serial port to activate certain antenna.
      * 
-     * @param ant Value of ANT_1 to ANT_4
+     * @param ant Antenna that we would like to switch (Value of ANT_1 to ANT_4
+     * @return String describing the command being sent to the Comm port or any
+     * eventual errors
      */
-    public void setAntenna(int ant)
+    public String setAntenna(int ant)
     {
+
         if(serialPort == null)
         {
-            System.err.println("Open come port first!");
+            return "ComPort not open!";
         }
         /* The following commands are sent to the CommPort depending on the ant
-                      DTR | RTS
-                     -----|-----
-        ANT_1(Dipole)  0  |  0
-        ANT_2(A Loop)  1  |  0
-        ANT_3(B Loop)  0  |  1
-        ANT_4(X Loop)  1  |  1
-        */
+         DTR | RTS
+         -----|-----
+         ANT_1(Dipole)  0  |  0
+         ANT_2(A Loop)  1  |  0
+         ANT_3(B Loop)  0  |  1
+         ANT_4(X Loop)  1  |  1
+         */
         try
         {
-            switch(ant)
+            switch (ant)
             {
                 case App.ANT_1:
                     serialPort.setDTR(false);
                     serialPort.setRTS(false);
-                    break;
+                    return "DTR=0, RTS=0";
 
                 case App.ANT_2:
                     serialPort.setDTR(true);
                     serialPort.setRTS(false);
-                    break;
+                    return "DTR=1, RTS=0";
 
                 case App.ANT_3:
                     serialPort.setDTR(false);
                     serialPort.setRTS(true);
-                    break;
+                    return "DTR=0, RTS=1";
 
                 case App.ANT_4:
                     serialPort.setDTR(true);
                     serialPort.setRTS(true);
-                    break;
+                    return "DTR=1, RTS=1";
+                default:
+                    return "Unknown antenna number!";
             }
-        } 
-        catch(SerialPortException ex)
+        }
+        catch (SerialPortException ex)
         {
             Logger.getLogger(SerialComm.class.getName()).log(Level.SEVERE, null, ex);
+            return ex.toString();
         }
     }
         
     
     public String getName()
     {
-        return serialPortName;
+        return portName;
     }
 }

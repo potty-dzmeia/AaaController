@@ -1,0 +1,7 @@
+- pom.xml                           - update version number
+- src/main/scripts/startup.sh       - update version number
+- src/main/scripts/startup.bat      - update version number
+- dlinecontroller->PROGRAM_VERSION  - update version number 
+- build.sh                          - start the script     
+- git tag -a v1.3.3 -m "comment"    - create new tag
+- git push origin v1.3.3            - push the tag

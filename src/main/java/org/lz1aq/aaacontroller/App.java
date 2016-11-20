@@ -11,38 +11,35 @@ import javax.swing.Timer;
  */
 public class App extends javax.swing.JFrame
 {
-
     private static final long serialVersionUID = 1L;
-
+    
+    static final String PROGRAM_VERSION = "1.0";
+    static final String PROGRAM_NAME    = "AAA-1 PC Control";
+            
     static final int MIN_SWITCHING_PERIOD_IN_MS     = 150;
     static final int DEFAULT_SWITCHING_PERIOD_IN_MS = 1000;
     static final int MAX_SWITCHING_PERIOD_IN_MS     = 60000;
-    static final int ANT_1 = 0;
-    static final int ANT_2 = 1;
-    static final int ANT_3 = 2;
-    static final int ANT_4 = 3;
+   
     static final int ANT_NOTSET = -1;
+    static final int ANT_1      = 0;
+    static final int ANT_2      = 1;
+    static final int ANT_3      = 2;
+    static final int ANT_4      = 3;
     
-    private final AppSettings   appSettings;
-    private final SerialComm    serialComm;
-    private final DefaultComboBoxModel comPortComboBoxModel;
-    private final DefaultComboBoxModel baudRateComboBoxModel;
+    private final AppSettings   appSettings;                // Holds current app settings and state
+    private final SerialComm    serialComm;                 // For sending data to the CommPort
+    
+    private final DefaultComboBoxModel comPortComboBoxModel;// 
     
     private Timer switchingTimer;
-    private int   currentAnt = 0;  
           
-   
     
     /**
      * Constructor
      */
     public App()
     {  
-        // Data for the Combo boxes in the settings Dialog
-        this.baudRateComboBoxModel = new DefaultComboBoxModel(new String[]
-        {
-            "1200", "2400", "4800", "9600", "19200", "38400", "57600", "115200"
-        });
+        // Data for the Combo boxe in the settings Dialog
         this.comPortComboBoxModel = SerialComm.getComportsComboboxModel();
 
         // Load user settings from the properties file
@@ -71,9 +68,7 @@ public class App extends javax.swing.JFrame
         jPanel1 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jComboBoxComPort = new javax.swing.JComboBox();
-        jComboBoxBaudRate = new javax.swing.JComboBox();
         jLabel12 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
         jTextFieldCustomCommPort = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
@@ -121,14 +116,14 @@ public class App extends javax.swing.JFrame
         jCheckBoxPeriodicSwitching = new javax.swing.JCheckBox();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
-        jMenuSettigns = new javax.swing.JMenuItem();
-        exitMenuItem = new javax.swing.JMenuItem();
+        jMenuItemSettings = new javax.swing.JMenuItem();
+        jMenuItemExit = new javax.swing.JMenuItem();
         helpMenu = new javax.swing.JMenu();
-        aboutMenuItem = new javax.swing.JMenuItem();
+        jMenuItemAbout = new javax.swing.JMenuItem();
 
         jDialogSettings.setTitle("Settings");
         jDialogSettings.setAlwaysOnTop(true);
-        jDialogSettings.setMinimumSize(new java.awt.Dimension(200, 200));
+        jDialogSettings.setMinimumSize(new java.awt.Dimension(300, 200));
         jDialogSettings.setModal(true);
         jDialogSettings.addComponentListener(new java.awt.event.ComponentAdapter()
         {
@@ -151,47 +146,27 @@ public class App extends javax.swing.JFrame
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 2, 5);
         jPanel4.add(jComboBoxComPort, gridBagConstraints);
 
-        jComboBoxBaudRate.setModel(this.getBaudRateComboBoxModel());
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
-        jPanel4.add(jComboBoxBaudRate, gridBagConstraints);
-
-        jLabel12.setText("CommPort name");
+        jLabel12.setText("CommPort");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 2, 0);
         jPanel4.add(jLabel12, gridBagConstraints);
 
-        jLabel13.setText("Baud rate");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
-        jPanel4.add(jLabel13, gridBagConstraints);
-
-        jLabel18.setText("Custom ComPort name");
+        jLabel18.setText("Virtual ComPort");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
         jPanel4.add(jLabel18, gridBagConstraints);
 
         jTextFieldCustomCommPort.setToolTipText("Make sure this field is empty if you don't want to use a custom comport!");
@@ -201,7 +176,7 @@ public class App extends javax.swing.JFrame
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         jPanel4.add(jTextFieldCustomCommPort, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -266,8 +241,9 @@ public class App extends javax.swing.JFrame
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.weighty = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
         jPanel3.add(jLabel1, gridBagConstraints);
 
@@ -276,8 +252,9 @@ public class App extends javax.swing.JFrame
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.weighty = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
         jPanel3.add(jLabel4, gridBagConstraints);
 
@@ -286,18 +263,21 @@ public class App extends javax.swing.JFrame
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.weighty = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
         jPanel3.add(jLabel5, gridBagConstraints);
 
+        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel6.setText("Antenna 1");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.weighty = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
         jPanel3.add(jLabel6, gridBagConstraints);
 
@@ -513,7 +493,9 @@ public class App extends javax.swing.JFrame
         jDialogAbout.setTitle("About");
         jDialogAbout.setAlwaysOnTop(true);
         jDialogAbout.setModal(true);
+        jDialogAbout.setPreferredSize(new java.awt.Dimension(400, 300));
         jDialogAbout.setResizable(false);
+        jDialogAbout.getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jButtonAboutOk.setText("OK");
         jButtonAboutOk.addActionListener(new java.awt.event.ActionListener()
@@ -523,10 +505,28 @@ public class App extends javax.swing.JFrame
                 jButtonAboutOkActionPerformed(evt);
             }
         });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 20);
+        jDialogAbout.getContentPane().add(jButtonAboutOk, gridBagConstraints);
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
         jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel11.setText("Source code available at ");
+        jLabel11.setText("More info and source code available at: ");
+        jLabel11.setToolTipText("");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        jDialogAbout.getContentPane().add(jLabel11, gridBagConstraints);
 
         jTextField1.setEditable(false);
         jTextField1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -534,53 +534,49 @@ public class App extends javax.swing.JFrame
         jTextField1.setText("www.active-antenna.eu");
         jTextField1.setToolTipText("");
         jTextField1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 10, 0);
+        jDialogAbout.getContentPane().add(jTextField1, gridBagConstraints);
 
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel10.setText("by LZ1AQ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        jDialogAbout.getContentPane().add(jLabel10, gridBagConstraints);
 
         jLabel14.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
         jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel14.setText("Serial Interface to LZ1AQ's AAA Controller ");
+        jLabel14.setText(PROGRAM_NAME+" v."+PROGRAM_VERSION);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        jDialogAbout.getContentPane().add(jLabel14, gridBagConstraints);
 
         jTextField3.setEditable(false);
         jTextField3.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jTextField3.setText("github.com/potty-dzmeia/AaaController");
-
-        javax.swing.GroupLayout jDialogAboutLayout = new javax.swing.GroupLayout(jDialogAbout.getContentPane());
-        jDialogAbout.getContentPane().setLayout(jDialogAboutLayout);
-        jDialogAboutLayout.setHorizontalGroup(
-            jDialogAboutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jDialogAboutLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jDialogAboutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 342, Short.MAX_VALUE)
-                    .addComponent(jButtonAboutOk, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jTextField3)
-                    .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        jDialogAboutLayout.setVerticalGroup(
-            jDialogAboutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jDialogAboutLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel10)
-                .addGap(30, 30, 30)
-                .addComponent(jLabel11)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButtonAboutOk)
-                .addContainerGap())
-        );
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
+        jDialogAbout.getContentPane().add(jTextField3, gridBagConstraints);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Serial Interface to LZ1AQ's Active Antenna Amplifier");
+        setTitle(PROGRAM_NAME+" v."+PROGRAM_VERSION);
         setMinimumSize(new java.awt.Dimension(200, 200));
         addWindowListener(new java.awt.event.WindowAdapter()
         {
@@ -706,6 +702,7 @@ public class App extends javax.swing.JFrame
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
         jPanel12.add(jCheckBoxPeriodicSwitching, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -721,42 +718,42 @@ public class App extends javax.swing.JFrame
         fileMenu.setMnemonic('f');
         fileMenu.setText("File");
 
-        jMenuSettigns.setText("Settings");
-        jMenuSettigns.addActionListener(new java.awt.event.ActionListener()
+        jMenuItemSettings.setText("Settings");
+        jMenuItemSettings.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
-                jMenuSettignsActionPerformed(evt);
+                jMenuItemSettingsActionPerformed(evt);
             }
         });
-        fileMenu.add(jMenuSettigns);
+        fileMenu.add(jMenuItemSettings);
 
-        exitMenuItem.setMnemonic('x');
-        exitMenuItem.setText("Exit");
-        exitMenuItem.addActionListener(new java.awt.event.ActionListener()
+        jMenuItemExit.setMnemonic('x');
+        jMenuItemExit.setText("Exit");
+        jMenuItemExit.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
-                exitMenuItemActionPerformed(evt);
+                jMenuItemExitActionPerformed(evt);
             }
         });
-        fileMenu.add(exitMenuItem);
+        fileMenu.add(jMenuItemExit);
 
         menuBar.add(fileMenu);
 
         helpMenu.setMnemonic('h');
         helpMenu.setText("Help");
 
-        aboutMenuItem.setMnemonic('a');
-        aboutMenuItem.setText("About");
-        aboutMenuItem.addActionListener(new java.awt.event.ActionListener()
+        jMenuItemAbout.setMnemonic('a');
+        jMenuItemAbout.setText("About");
+        jMenuItemAbout.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
-                aboutMenuItemActionPerformed(evt);
+                jMenuItemAboutActionPerformed(evt);
             }
         });
-        helpMenu.add(aboutMenuItem);
+        helpMenu.add(jMenuItemAbout);
 
         menuBar.add(helpMenu);
 
@@ -773,20 +770,19 @@ public class App extends javax.swing.JFrame
 
     private void formWindowOpened(java.awt.event.WindowEvent evt)//GEN-FIRST:event_formWindowOpened
     {//GEN-HEADEREND:event_formWindowOpened
-        loadAppState(); // Init the application to the expected state
+        initMainWindow(); // Init the application to the expected state
     }//GEN-LAST:event_formWindowOpened
 
     private void formWindowClosing(java.awt.event.WindowEvent evt)//GEN-FIRST:event_formWindowClosing
     {//GEN-HEADEREND:event_formWindowClosing
-        storeMainWindowParams();
-        serialComm.close();
+        onMainWindowClosed();
     }//GEN-LAST:event_formWindowClosing
 
     private void jDialogPeriodicSwitchingComponentShown(java.awt.event.ComponentEvent evt)//GEN-FIRST:event_jDialogPeriodicSwitchingComponentShown
     {//GEN-HEADEREND:event_jDialogPeriodicSwitchingComponentShown
         initPeriodicSwtchingDialog();
         
-        // Switching logic is inside the Listener
+        // Switching logic is inside the Listener - so let's start the timer
         switchingTimer = new Timer(100, directionSwitchingListener);
         switchingTimer.setRepeats(false);
         switchingTimer.start();
@@ -802,23 +798,23 @@ public class App extends javax.swing.JFrame
         }
     }//GEN-LAST:event_jDialogPeriodicSwitchingComponentHidden
 
-    private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_exitMenuItemActionPerformed
-    {//GEN-HEADEREND:event_exitMenuItemActionPerformed
-        serialComm.close();
+    private void jMenuItemExitActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItemExitActionPerformed
+    {//GEN-HEADEREND:event_jMenuItemExitActionPerformed
+        onMainWindowClosed();
         System.exit(0);
-    }//GEN-LAST:event_exitMenuItemActionPerformed
+    }//GEN-LAST:event_jMenuItemExitActionPerformed
 
-    private void jMenuSettignsActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuSettignsActionPerformed
-    {//GEN-HEADEREND:event_jMenuSettignsActionPerformed
+    private void jMenuItemSettingsActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItemSettingsActionPerformed
+    {//GEN-HEADEREND:event_jMenuItemSettingsActionPerformed
         jDialogSettings.pack();
         jDialogSettings.setVisible(true);
-    }//GEN-LAST:event_jMenuSettignsActionPerformed
+    }//GEN-LAST:event_jMenuItemSettingsActionPerformed
 
-    private void aboutMenuItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_aboutMenuItemActionPerformed
-    {//GEN-HEADEREND:event_aboutMenuItemActionPerformed
+    private void jMenuItemAboutActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItemAboutActionPerformed
+    {//GEN-HEADEREND:event_jMenuItemAboutActionPerformed
         jDialogAbout.pack();
         jDialogAbout.setVisible(true);
-    }//GEN-LAST:event_aboutMenuItemActionPerformed
+    }//GEN-LAST:event_jMenuItemAboutActionPerformed
 
     private void jButtonAboutOkActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonAboutOkActionPerformed
     {//GEN-HEADEREND:event_jButtonAboutOkActionPerformed
@@ -833,8 +829,8 @@ public class App extends javax.swing.JFrame
     private void jButtonSaveActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonSaveActionPerformed
     {//GEN-HEADEREND:event_jButtonSaveActionPerformed
         jDialogSettings.setVisible(false); // Hide the SettingsDialog
-        storeSettingsDialogParams(); // Read the state of the controls and save them
-        setAntennaButtonsLabels();
+        storeSettingsDialogParams();       // Read the state of the controls and save them
+        setAntennaButtonsLabels();         
         
         // Open new comport if name has changed
         if(serialComm.getName().compareTo(appSettings.getComPort()) != 0)
@@ -866,31 +862,31 @@ public class App extends javax.swing.JFrame
     {//GEN-HEADEREND:event_jToggleButtonAnt1ItemStateChanged
         if(jToggleButtonAnt1.isSelected())
         {
-            serialComm.setAntenna(ANT_1);
+            onAntennaButtonStateChange(ANT_1);
         }
     }//GEN-LAST:event_jToggleButtonAnt1ItemStateChanged
 
     private void jToggleButtonAnt2ItemStateChanged(java.awt.event.ItemEvent evt)//GEN-FIRST:event_jToggleButtonAnt2ItemStateChanged
     {//GEN-HEADEREND:event_jToggleButtonAnt2ItemStateChanged
-        if(jToggleButtonAnt1.isSelected())
+        if(jToggleButtonAnt2.isSelected())
         {
-            serialComm.setAntenna(ANT_2);
+           onAntennaButtonStateChange(ANT_2);
         }
     }//GEN-LAST:event_jToggleButtonAnt2ItemStateChanged
 
     private void jToggleButtonAnt3ItemStateChanged(java.awt.event.ItemEvent evt)//GEN-FIRST:event_jToggleButtonAnt3ItemStateChanged
     {//GEN-HEADEREND:event_jToggleButtonAnt3ItemStateChanged
-        if(jToggleButtonAnt1.isSelected())
+        if(jToggleButtonAnt3.isSelected())
         {
-            serialComm.setAntenna(ANT_3);
+            onAntennaButtonStateChange(ANT_3);
         }
     }//GEN-LAST:event_jToggleButtonAnt3ItemStateChanged
 
     private void jToggleButtonAnt4ItemStateChanged(java.awt.event.ItemEvent evt)//GEN-FIRST:event_jToggleButtonAnt4ItemStateChanged
     {//GEN-HEADEREND:event_jToggleButtonAnt4ItemStateChanged
-        if(jToggleButtonAnt1.isSelected())
+        if(jToggleButtonAnt4.isSelected())
         {
-            serialComm.setAntenna(ANT_4);
+            onAntennaButtonStateChange(ANT_4);
         }
     }//GEN-LAST:event_jToggleButtonAnt4ItemStateChanged
 
@@ -948,11 +944,9 @@ public class App extends javax.swing.JFrame
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenuItem aboutMenuItem;
     private javax.swing.ButtonGroup buttonGroupAntennas;
     private javax.swing.ButtonGroup buttonGroupDebugWindow;
     private javax.swing.ButtonGroup buttonGroupInSettings;
-    private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenu helpMenu;
     private javax.swing.JButton jButtonAboutOk;
@@ -964,7 +958,6 @@ public class App extends javax.swing.JFrame
     private javax.swing.JCheckBox jCheckBoxAnt3;
     private javax.swing.JCheckBox jCheckBoxAnt4;
     private javax.swing.JCheckBox jCheckBoxPeriodicSwitching;
-    private javax.swing.JComboBox jComboBoxBaudRate;
     private javax.swing.JComboBox jComboBoxComPort;
     private javax.swing.JDialog jDialogAbout;
     private javax.swing.JDialog jDialogPeriodicSwitching;
@@ -973,7 +966,6 @@ public class App extends javax.swing.JFrame
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
@@ -982,7 +974,9 @@ public class App extends javax.swing.JFrame
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabelSerialComm;
-    private javax.swing.JMenuItem jMenuSettigns;
+    private javax.swing.JMenuItem jMenuItemAbout;
+    private javax.swing.JMenuItem jMenuItemExit;
+    private javax.swing.JMenuItem jMenuItemSettings;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel12;
@@ -1008,60 +1002,64 @@ public class App extends javax.swing.JFrame
     private javax.swing.JMenuBar menuBar;
     // End of variables declaration//GEN-END:variables
 
-    public DefaultComboBoxModel getBaudRateComboBoxModel()
+    
+    /**
+     * Call this function when Main window is about to close.
+     */
+    void onMainWindowClosed()
     {
-        return baudRateComboBoxModel;
+        storeMainWindowParams();
+        serialComm.close();
     }
-
+    
+    
+    /**
+     * Call this function from the button state change handler. 
+     * The function sends the needed command to the Comm port (plus some other
+     * additional actions)
+     * 
+     * @param antenna - antenna number that was pressed
+     */
+    void onAntennaButtonStateChange(int antenna)
+    {
+      appSettings.setLastUsedAntenna(antenna);      
+      this.setTitle(appSettings.getAntennaLabel(antenna)); // Title of main window should show antenna name
+      
+      String result = serialComm.setAntenna(antenna);
+      jLabelSerialComm.setText(serialComm.getName() + ": " + result);
+    }
+    
+    
     /* Store all the applications params that we would like to restore when the app is started again*/
     private void storeMainWindowParams()
     {
-        if (this.getExtendedState() != MAXIMIZED_BOTH)
+        if(this.getExtendedState() != MAXIMIZED_BOTH)
         {
             appSettings.setJFrameDimensions(this.getBounds());
         }
-        appSettings.setLastUsedAntenna(getCurrentAntenna());
+        
         appSettings.SaveSettingsToDisk();
     }
-
-    /**
-     * Get the number of the currently selected antenna
-     *
-     * @return ANT_1 to ANT_4
-     */
-    private int getCurrentAntenna()
-    {
-        if (jToggleButtonAnt1.isSelected())
-        {
-            return ANT_1;
-        } else if (jToggleButtonAnt2.isSelected())
-        {
-            return ANT_2;
-        } else if (jToggleButtonAnt3.isSelected())
-        {
-            return ANT_3;
-        } else if (jToggleButtonAnt4.isSelected())
-        {
-            return ANT_4;
-        } else
-        {
-            throw new InternalError("No antenna is selected!");
-        }
-    }
-
     
-    private void loadAppState()
+    
+    /**
+     * Sets the main window controls to the desired state
+     */
+    private void initMainWindow()
     {
-        // Read last used JFrame dimensions and restore it
+        // Restore Main windows size
         this.setBounds(appSettings.getJFrameDimensions()); 
-        // 
         setAntennaButtonsLabels();
         // Select the antenna that was last used
         pressAntennaButton(appSettings.getLastUsedAntenna());
     }
-
     
-    /* Selects the antenna that was last used when the application closed */
+
+    /**
+     * Selects the antenna that was last used when the application closed 
+     * 
+     * @param antenna - value of ANT_1 to ANT_4
+     */
     private void pressAntennaButton(int antenna)
     {
         switch (antenna)
@@ -1097,29 +1095,29 @@ public class App extends javax.swing.JFrame
     private void storeSettingsDialogParams()
     {
         // CommPort 
-        if (!jTextFieldCustomCommPort.getText().isEmpty()) // CustomComPort is used
-        {
+        if (!jTextFieldCustomCommPort.getText().trim().isEmpty()) 
+        {   
+            // CustomComPort is used
             appSettings.setComPort(jTextFieldCustomCommPort.getText());
-        } else
+        } 
+        else
         {
-            if (jComboBoxComPort.getSelectedItem() != null) // Use CommPort from the list
+            if (jComboBoxComPort.getSelectedItem() != null) 
             {
+                // Use CommPort from the list
                 appSettings.setComPort(jComboBoxComPort.getSelectedItem().toString());
-            } else  // Empty
+            } else  
             {
-                appSettings.setComPort("");
+                // Empty
+                appSettings.setComPort(""); 
             }
         }
-
-        appSettings.setBaudRate(jComboBoxBaudRate.getSelectedItem().toString());
 
         // Labels for the antenna buttons
         appSettings.setAntennaLabel(0, jTextFieldAnt1Label.getText());
         appSettings.setAntennaLabel(1, jTextFieldAnt2Label.getText());
         appSettings.setAntennaLabel(2, jTextFieldAnt3Label.getText());
         appSettings.setAntennaLabel(3, jTextFieldAnt4Label.getText());
-
-        appSettings.SaveSettingsToDisk();
     }
 
     /**
@@ -1129,10 +1127,10 @@ public class App extends javax.swing.JFrame
     void storeSwitchingDialogParams()
     {
         // Store which antennas are checked
-        appSettings.setIsAntennaCycled(0, jCheckBoxAnt1.isSelected());
-        appSettings.setIsAntennaCycled(1, jCheckBoxAnt2.isSelected());
-        appSettings.setIsAntennaCycled(2, jCheckBoxAnt3.isSelected());
-        appSettings.setIsAntennaCycled(3, jCheckBoxAnt4.isSelected());
+        appSettings.setIsAntennaCheckmarked(0, jCheckBoxAnt1.isSelected());
+        appSettings.setIsAntennaCheckmarked(1, jCheckBoxAnt2.isSelected());
+        appSettings.setIsAntennaCheckmarked(2, jCheckBoxAnt3.isSelected());
+        appSettings.setIsAntennaCheckmarked(3, jCheckBoxAnt4.isSelected());
 
         // Store the switching periods for each antenna
         int period = convertStringPeriodToInt(jTextFieldSwitchingPeriodAnt1.getText());
@@ -1165,7 +1163,8 @@ public class App extends javax.swing.JFrame
         try
         {
             period = Integer.parseInt(stingPeriod);
-        } catch (NumberFormatException exc)
+        } 
+        catch (NumberFormatException exc)
         {
             period = DEFAULT_SWITCHING_PERIOD_IN_MS;
             return period; // Return default value if the user didn't enter a number
@@ -1174,10 +1173,12 @@ public class App extends javax.swing.JFrame
         if (period < MIN_SWITCHING_PERIOD_IN_MS)
         {
             period = MIN_SWITCHING_PERIOD_IN_MS;
-        } else if (period > MAX_SWITCHING_PERIOD_IN_MS)
+        } 
+        else if (period > MAX_SWITCHING_PERIOD_IN_MS)
         {
             period = MAX_SWITCHING_PERIOD_IN_MS;
         }
+        
         return period;
     }
 
@@ -1189,15 +1190,14 @@ public class App extends javax.swing.JFrame
     {
         // ComPort
         if (comPortComboBoxModel.getIndexOf(appSettings.getComPort()) >= 0)
-        {//If standart ComPort is set...
+        {
+            //If standart ComPort is set...
             jComboBoxComPort.setSelectedItem(appSettings.getComPort());
             jTextFieldCustomCommPort.setText(""); // Custom 
         } else
         {
             jTextFieldCustomCommPort.setText(appSettings.getComPort());
         }
-
-        jComboBoxBaudRate.setSelectedItem(appSettings.getBaudRate());
 
         // Labels for the antenna buttons
         jTextFieldAnt1Label.setText(appSettings.getAntennaLabel(0));
@@ -1206,6 +1206,11 @@ public class App extends javax.swing.JFrame
         jTextFieldAnt4Label.setText(appSettings.getAntennaLabel(3));
     }
 
+    
+    /**
+     * User has opened the PeriodicSwtchingDialog and we need to load the 
+     * state of the controls
+     */
     void initPeriodicSwtchingDialog()
     {
         // Antenna names
@@ -1215,10 +1220,10 @@ public class App extends javax.swing.JFrame
         jCheckBoxAnt4.setText(appSettings.getAntennaLabel(3));
 
         // Which antennas are enabled
-        jCheckBoxAnt1.setSelected(appSettings.getIsAntennaCycled(0));
-        jCheckBoxAnt2.setSelected(appSettings.getIsAntennaCycled(1));
-        jCheckBoxAnt3.setSelected(appSettings.getIsAntennaCycled(2));
-        jCheckBoxAnt4.setSelected(appSettings.getIsAntennaCycled(3));
+        jCheckBoxAnt1.setSelected(appSettings.getIsAntennaCheckmarked(0));
+        jCheckBoxAnt2.setSelected(appSettings.getIsAntennaCheckmarked(1));
+        jCheckBoxAnt3.setSelected(appSettings.getIsAntennaCheckmarked(2));
+        jCheckBoxAnt4.setSelected(appSettings.getIsAntennaCheckmarked(3));
 
         // Antenna periods
         jTextFieldSwitchingPeriodAnt1.setText(Integer.toString(appSettings.getAntennaSwitchingPeriod(0)));
@@ -1228,42 +1233,7 @@ public class App extends javax.swing.JFrame
     }
     
     
-    /**
-     * Cycles currentAnt to the next antenna that is to be switched
-     *
-     * Example: currentAnt is ANT_3 and we have the following antenna selection:
-     * ANT_1 - no checked ANT_2 - checked ANT_3 - checked ANT_4 - not checked.
-     *
-     * In this case the currentAnt will be set to ANT2
-     *
-     * @return From ANT1 to ANT4 and ANT_NOTSET if no antenna is selected
-     */
-    void setNextSelectedAntenna()
-    {
-        // Find selected antennas
-        boolean[] isAntennaSelected = new boolean[AppSettings.ANTENNA_COUNT];
-        isAntennaSelected[ANT_1] = jCheckBoxAnt1.isSelected();
-        isAntennaSelected[ANT_2] = jCheckBoxAnt2.isSelected();
-        isAntennaSelected[ANT_3] = jCheckBoxAnt3.isSelected();
-        isAntennaSelected[ANT_4] = jCheckBoxAnt4.isSelected();
-
-        // Traverse all antennas
-        for (int i = 0; i < AppSettings.ANTENNA_COUNT; i++)
-        {
-            currentAnt++;
-            if (currentAnt > ANT_4)
-            {
-                currentAnt = ANT_1;
-            }
-
-            if (isAntennaSelected[currentAnt])
-            {
-                return; // found next
-            }
-        }
-
-        currentAnt = ANT_NOTSET; // We didn't find selected antenna
-    }
+   
 
     
     /**
@@ -1274,22 +1244,66 @@ public class App extends javax.swing.JFrame
         @Override
         public void actionPerformed(ActionEvent evt)
         {
-            // Update the variable: currentAnt
-            setNextSelectedAntenna();
+            int next;
+            
+            // find next antenna tha
+            next = findNextCheckmarkedAntenna(appSettings.getLastUsedAntenna());
 
             // Start timer for the required period
-            if (currentAnt == ANT_NOTSET)
+            if (next == ANT_NOTSET)
             {
-                switchingTimer.setDelay(200); // let's come back in 100ms and check if the user has selected antennas to be cycled
+                switchingTimer.setDelay(200); // let's come back in 100ms and check if the user has checked some antenna
                 switchingTimer.start();
             } else
             {
-                pressAntennaButton(currentAnt);
+                pressAntennaButton(next);
 
-                int perdiod = appSettings.getAntennaSwitchingPeriod(currentAnt);
+                int perdiod = appSettings.getAntennaSwitchingPeriod(next);
                 switchingTimer.setInitialDelay(perdiod);
                 switchingTimer.start();
             }
         }
     };
+    
+    
+    /**
+     * Finds the next antenna from the SwitchingDialog that is checkmarked
+     * 
+     * Example: currentCheckmarkedAntenna is ANT_3 and we have the 
+     * following antenna selection: ANT_1 - no checked ANT_2 - checked ANT_3 - checked ANT_4 - not checked.
+     *
+     * In this case the currentAnt will be set to ANT2
+     * 
+     * @param currentCheckmarkedAntenna - a value from ANT_NOTSET to ANT_4
+     * @return Next checkmarked antenna (a value from ANT_NOTSET to ANT_4)
+     */
+    int findNextCheckmarkedAntenna(int currentCheckmarkedAntenna)
+    {
+        // Get the checkmark status for each antenna
+        boolean[] arrayIsAntChecked = new boolean[AppSettings.ANTENNA_COUNT];
+        for(int i=0; i<arrayIsAntChecked.length; i++)
+        {
+            arrayIsAntChecked[i] = appSettings.getIsAntennaCheckmarked(i);
+        }
+
+        // Traverse all antennas starting from the currentCheckmarkedAntenna
+        int antenna = currentCheckmarkedAntenna;
+        
+        for (int i = 0; i < AppSettings.ANTENNA_COUNT; i++)
+        {
+            antenna++;
+            if (antenna >= AppSettings.ANTENNA_COUNT)
+            {
+                // start from the first antenna if we reach the end of the array
+                antenna = ANT_1; 
+            }
+
+            if (arrayIsAntChecked[antenna])
+            {
+                return antenna; // found next
+            }
+        }
+
+        return ANT_NOTSET; // We didn't find selected antenna
+    }
 }

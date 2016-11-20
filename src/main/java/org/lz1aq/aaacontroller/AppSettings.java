@@ -15,35 +15,31 @@ import java.util.logging.Logger;
  */
 public final class AppSettings 
 {
-    static final String SETTINGS_FILE_NAME          = "Settings.properties";
+    static final String SETTINGS_FILE_NAME  = "Settings.properties";
     
     static final int ANTENNA_COUNT = 4; // The number of antennas
     
     // List of properties that are going to be saved in a file
-    static final String PROP_DEVICE_ID          = "deviceId";
-    static final String PROP_COMPORT            = "comPort";
-    static final String PROP_BAUDE_RATE         = "baudRate";
-    static final String PROP_MAIN_WINDOW_X      = "x";
-    static final String PROP_MAIN_WINDOW_Y      = "y";
-    static final String PROP_MAIN_WINDOW_WIDTH  = "w";
-    static final String PROP_MAIN_WINDOW_HEIGHT = "h";
+    private static final String PROP_COMPORT            = "comPort";
+    private static final String PROP_MAIN_WINDOW_X      = "x";
+    private static final String PROP_MAIN_WINDOW_Y      = "y";
+    private static final String PROP_MAIN_WINDOW_WIDTH  = "w";
+    private static final String PROP_MAIN_WINDOW_HEIGHT = "h";
     
-    static final String PROP_ANTENNA_NAME       = "antenna_name";
-    static final String PROP_ANTENNA_SWITCHING_PERIOD  = "antenna_period";
-    static final String PROP_ANTENNA_IS_CYCLED  = "atenna_is_cycled";
-    static final String PROP_LAST_USED_ANTENNA  = "last_used_antenna";
-    
+    private static final String PROP_ANTENNA_NAME             = "antenna_name";
+    private static final String PROP_ANTENNA_SWITCHING_PERIOD = "antenna_period";
+    private static final String PROP_ANTENNA_IS_CHECKMARKED   = "atenna_is_checkmarked";
+    private static final String PROP_LAST_USED_ANTENNA        = "last_used_antenna";
     
     private String    comPort;
     private String    baudRate;
-    private String[]  antennaName;            
-    private String[]  antennaSwitchingPeriod; // String keeping integer
-    private String[]  isAntennaCycled;        // String keeping boolean
-    private int       lastUsedAntenna;        // A number from 1 to 4
+    private String[]  arrayAntennaName;            
+    private String[]  arrayAntennaSwitchingPeriod;  // String keeping integer
+    private String[]  arrayIsAntennaCheckmarked;    // String keeping boolean
+    private int       lastUsedAntenna;              // A number from 1 to 4
    
     private Rectangle mainWindowDimensions; // JFrame position and size
- 
-    
+
     private final Properties prop;
     
     
@@ -55,9 +51,9 @@ public final class AppSettings
      */
     public AppSettings()
     { 
-      antennaName            = new String[ANTENNA_COUNT];
-      isAntennaCycled        = new String[ANTENNA_COUNT];
-      antennaSwitchingPeriod = new String[ANTENNA_COUNT];
+      arrayAntennaName            = new String[ANTENNA_COUNT];
+      arrayIsAntennaCheckmarked   = new String[ANTENNA_COUNT];
+      arrayAntennaSwitchingPeriod = new String[ANTENNA_COUNT];
       
       this.prop            = new Properties();
       mainWindowDimensions = new Rectangle();
@@ -98,12 +94,12 @@ public final class AppSettings
     
     public void setAntennaLabel(int antennaIndex, String antLabel)
     {
-      this.antennaName[antennaIndex] = antLabel;
+      this.arrayAntennaName[antennaIndex] = antLabel;
     }
     
     public String getAntennaLabel(int antennaIndex)
     {
-      return antennaName[antennaIndex];
+      return arrayAntennaName[antennaIndex];
     }
     
     public void setLastUsedAntenna(int antennaNumber)
@@ -118,22 +114,22 @@ public final class AppSettings
      
     public void setAntennaSwitchingPeriod(int antennaIndex, int periodInMs)
     {
-      antennaSwitchingPeriod[antennaIndex] = Integer.toString(periodInMs);
+      arrayAntennaSwitchingPeriod[antennaIndex] = Integer.toString(periodInMs);
     }
     
     public int getAntennaSwitchingPeriod(int antennaIndex)
     {
-      return Integer.parseInt(antennaSwitchingPeriod[antennaIndex]);
+      return Integer.parseInt(arrayAntennaSwitchingPeriod[antennaIndex]);
     }
     
-    public void setIsAntennaCycled(int antennaIndex, boolean isCycled)
+    public void setIsAntennaCheckmarked(int antennaIndex, boolean isChecked)
     {
-      isAntennaCycled[antennaIndex] = Boolean.toString(isCycled);
+      arrayIsAntennaCheckmarked[antennaIndex] = Boolean.toString(isChecked);
     }   
     
-    public boolean getIsAntennaCycled(int antennaIndex)
+    public boolean getIsAntennaCheckmarked(int antennaIndex)
     {
-      return Boolean.parseBoolean(isAntennaCycled[antennaIndex]);
+      return Boolean.parseBoolean(arrayIsAntennaCheckmarked[antennaIndex]);
     }
     
     
@@ -141,10 +137,10 @@ public final class AppSettings
      * Stores the array of values into properties which are named using
      * key+index of the value
      * 
-     * @param key 
-     * @param values 
+     * @param key - property key
+     * @param values - array of values that is going to be stored
      */
-    private void setAntProperties(String key, String[] values)
+    private void setProperties(String key, String[] values)
     {
       for(int i=0; i<values.length; i++)
       {
@@ -153,13 +149,20 @@ public final class AppSettings
     }
     
     
-    private void getAntProperties(String key, String[] values)
+    /**
+     * Reads multiple properties that were written using the function setProperties()
+     * 
+     * @param key - Property key
+     * @param values - array where the properties will be written
+     */
+    private void getProperties(String key, String[] values)
     {
       for(int i=0; i<values.length; i++)
       {
         values[i] = prop.getProperty(key+i);
       }
     }
+    
     
     /**
      * Saves the settings into a file called "DLineSettings.properties"
@@ -168,7 +171,6 @@ public final class AppSettings
     {
         // Store last used antenna and direction:
         prop.setProperty(PROP_COMPORT, comPort);
-        prop.setProperty(PROP_BAUDE_RATE, baudRate);
      
         // Now save the JFrame dimensions:
         prop.setProperty(PROP_MAIN_WINDOW_X, Integer.toString(mainWindowDimensions.x));
@@ -177,11 +179,11 @@ public final class AppSettings
         prop.setProperty(PROP_MAIN_WINDOW_HEIGHT, Integer.toString(mainWindowDimensions.height));
         
         // Antenna names
-        setAntProperties(PROP_ANTENNA_NAME, antennaName);
+        setProperties(PROP_ANTENNA_NAME, arrayAntennaName);
         // Switching periods for the antennas
-        setAntProperties(PROP_ANTENNA_SWITCHING_PERIOD, antennaSwitchingPeriod);
+        setProperties(PROP_ANTENNA_SWITCHING_PERIOD, arrayAntennaSwitchingPeriod);
         // isCycled for each antenna
-        setAntProperties(PROP_ANTENNA_IS_CYCLED, isAntennaCycled);
+        setProperties(PROP_ANTENNA_IS_CHECKMARKED, arrayIsAntennaCheckmarked);
         // Last used antenna
         prop.setProperty(PROP_LAST_USED_ANTENNA, Integer.toString(lastUsedAntenna));
         
@@ -210,9 +212,6 @@ public final class AppSettings
             comPort  = prop.getProperty(PROP_COMPORT);
             if(comPort == null)
                 throwMissingPropertyException(PROP_COMPORT);
-            baudRate = prop.getProperty(PROP_BAUDE_RATE);
-            if(baudRate == null)
-                throwMissingPropertyException(PROP_BAUDE_RATE);    
             
             // JFrame dimensions:
             int x = Integer.parseInt(prop.getProperty(PROP_MAIN_WINDOW_X));
@@ -222,11 +221,11 @@ public final class AppSettings
             this.mainWindowDimensions = new Rectangle(x,y,w,h);
     
             // Antenna names
-            getAntProperties(PROP_ANTENNA_NAME, antennaName);
+            getProperties(PROP_ANTENNA_NAME, arrayAntennaName);
             // Switching periods for the antennas
-            getAntProperties(PROP_ANTENNA_SWITCHING_PERIOD, antennaSwitchingPeriod);
+            getProperties(PROP_ANTENNA_SWITCHING_PERIOD, arrayAntennaSwitchingPeriod);
             // isCycled for each antenna
-            getAntProperties(PROP_ANTENNA_IS_CYCLED, isAntennaCycled);
+            getProperties(PROP_ANTENNA_IS_CHECKMARKED, arrayIsAntennaCheckmarked);
             // Last used antenna
             lastUsedAntenna = Integer.parseInt(prop.getProperty(PROP_LAST_USED_ANTENNA));
             
@@ -256,35 +255,35 @@ public final class AppSettings
     private void SetSettingsToDefault()
     {
         // CommPort
-        comPort = "";
+        comPort  = "";
         baudRate = "2400";         
         
         // We have minimum size so we don't have to worry about the values:
         mainWindowDimensions.height = 0;
-        mainWindowDimensions.width = 0;
+        mainWindowDimensions.width  = 0;
         mainWindowDimensions.x = 0;
         mainWindowDimensions.y = 0;
         
         // Antenna names
-        antennaName[0] = "Dipole";
-        antennaName[1] = "A Loop";
-        antennaName[2] = "B Loop";
-        antennaName[3] = "X Loop";
+        arrayAntennaName[0] = "Dipole";
+        arrayAntennaName[1] = "A Loop";
+        arrayAntennaName[2] = "B Loop";
+        arrayAntennaName[3] = "X Loop";
                 
         // Switching periods
-        for(int i=0; i<antennaSwitchingPeriod.length; i++)
+        for(int i=0; i<arrayAntennaSwitchingPeriod.length; i++)
         {
-          antennaSwitchingPeriod[i] = Integer.toString(App.DEFAULT_SWITCHING_PERIOD_IN_MS);
+          arrayAntennaSwitchingPeriod[i] = Integer.toString(App.DEFAULT_SWITCHING_PERIOD_IN_MS);
         }
         
-        // isAntennaCycled
-        for(int i=0; i<isAntennaCycled.length; i++)
+        // isAntennaCheckmarked
+        for(int i=0; i<arrayIsAntennaCheckmarked.length; i++)
         {
-          isAntennaCycled[i] = Boolean.toString(true);
+          arrayIsAntennaCheckmarked[i] = Boolean.toString(true);
         }
          
         // Last active antenna
-        lastUsedAntenna = 1;
+        lastUsedAntenna = 0;
     }
     
     void throwMissingPropertyException(String propertyName) throws Exception

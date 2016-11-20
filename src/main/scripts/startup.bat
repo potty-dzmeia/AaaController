@@ -1,1 +1,1 @@
-java -classpath "aaacontroller-0.5.jar" org.lz1aq.aaacontroller.App
+java -classpath "aaacontroller-1.0.jar" org.lz1aq.aaacontroller.App

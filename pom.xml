@@ -4,7 +4,7 @@
 
   <groupId>org.lz1aq</groupId>
   <artifactId>aaacontroller</artifactId>
-  <version>0.5</version>
+  <version>1.0</version>
   <description>Initial version</description>
   <packaging>jar</packaging>
   <name>aaacontroller</name>
