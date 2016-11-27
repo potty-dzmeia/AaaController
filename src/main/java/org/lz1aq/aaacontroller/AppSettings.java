@@ -61,7 +61,6 @@ public final class AppSettings
       this.LoadSettingsFromDisk();
     }
  
-    
     public Rectangle getJFrameDimensions()
     {
         return mainWindowDimensions;

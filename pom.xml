@@ -4,8 +4,8 @@
 
   <groupId>org.lz1aq</groupId>
   <artifactId>aaacontroller</artifactId>
-  <version>1.1</version>
-  <description>GUI optimization: less space between buttons and few more things.</description>
+  <version>1.2</version>
+  <description>Fixed issue where when program starts for the first time the main window size is too small.</description>
   <packaging>jar</packaging>
   <name>aaacontroller</name>
   <url>www.active-antenna.eu</url>

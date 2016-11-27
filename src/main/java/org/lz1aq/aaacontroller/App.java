@@ -13,7 +13,7 @@ public class App extends javax.swing.JFrame
 {
     private static final long serialVersionUID = 1L;
     
-    static final String PROGRAM_VERSION = "1.1";
+    static final String PROGRAM_VERSION = "1.2";
     static final String PROGRAM_NAME    = "AAA-1 PC Control";
             
     static final int MIN_SWITCHING_PERIOD_IN_MS     = 150;
@@ -578,7 +578,7 @@ public class App extends javax.swing.JFrame
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle(PROGRAM_NAME+" v."+PROGRAM_VERSION);
         setMinimumSize(new java.awt.Dimension(50, 50));
-        setPreferredSize(new java.awt.Dimension(200, 200));
+        setPreferredSize(new java.awt.Dimension(300, 300));
         addWindowListener(new java.awt.event.WindowAdapter()
         {
             public void windowOpened(java.awt.event.WindowEvent evt)
@@ -1059,8 +1059,13 @@ public class App extends javax.swing.JFrame
      */
     private void initMainWindow()
     {
-        // Restore Main windows size
-        this.setBounds(appSettings.getJFrameDimensions()); 
+        
+        if(appSettings.getJFrameDimensions().isEmpty() == false)
+        {
+            // Restore Main windows size
+            this.setBounds(appSettings.getJFrameDimensions()); 
+        }
+        
         setAntennaButtonsLabels();
         // Select the antenna that was last used
         pressAntennaButton(appSettings.getLastUsedAntenna());
