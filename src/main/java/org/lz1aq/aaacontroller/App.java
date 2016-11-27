@@ -13,7 +13,7 @@ public class App extends javax.swing.JFrame
 {
     private static final long serialVersionUID = 1L;
     
-    static final String PROGRAM_VERSION = "1.0";
+    static final String PROGRAM_VERSION = "1.1";
     static final String PROGRAM_NAME    = "AAA-1 PC Control";
             
     static final int MIN_SWITCHING_PERIOD_IN_MS     = 150;
@@ -106,13 +106,14 @@ public class App extends javax.swing.JFrame
         jLabel14 = new javax.swing.JLabel();
         jTextField3 = new javax.swing.JTextField();
         buttonGroupDebugWindow = new javax.swing.ButtonGroup();
+        jPanel6 = new javax.swing.JPanel();
+        jLabelSerialComm = new javax.swing.JLabel();
         jPanel11 = new javax.swing.JPanel();
         jToggleButtonAnt1 = new javax.swing.JToggleButton();
         jToggleButtonAnt2 = new javax.swing.JToggleButton();
         jToggleButtonAnt3 = new javax.swing.JToggleButton();
         jToggleButtonAnt4 = new javax.swing.JToggleButton();
         jPanel12 = new javax.swing.JPanel();
-        jLabelSerialComm = new javax.swing.JLabel();
         jCheckBoxPeriodicSwitching = new javax.swing.JCheckBox();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
@@ -436,7 +437,7 @@ public class App extends javax.swing.JFrame
         jPanel2.add(jButtonSetPeriodSwitching, gridBagConstraints);
 
         jTextFieldSwitchingPeriodAnt2.setText("jTextField4");
-        jTextFieldSwitchingPeriodAnt2.setToolTipText("Enter a value (200-60000) and press the \"Set\" button.");
+        jTextFieldSwitchingPeriodAnt2.setToolTipText("Enter a value (150-60000) and press the \"Set\" button.");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
@@ -447,7 +448,7 @@ public class App extends javax.swing.JFrame
         jPanel2.add(jTextFieldSwitchingPeriodAnt2, gridBagConstraints);
 
         jTextFieldSwitchingPeriodAnt3.setText("jTextField5");
-        jTextFieldSwitchingPeriodAnt3.setToolTipText("Enter a value (200-60000) and press the \"Set\" button.");
+        jTextFieldSwitchingPeriodAnt3.setToolTipText("Enter a value (150-60000) and press the \"Set\" button.");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
@@ -458,7 +459,7 @@ public class App extends javax.swing.JFrame
         jPanel2.add(jTextFieldSwitchingPeriodAnt3, gridBagConstraints);
 
         jTextFieldSwitchingPeriodAnt4.setText("jTextField6");
-        jTextFieldSwitchingPeriodAnt4.setToolTipText("Enter a value (200-60000) and press the \"Set\" button.");
+        jTextFieldSwitchingPeriodAnt4.setToolTipText("Enter a value (150-60000) and press the \"Set\" button.");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
@@ -469,7 +470,7 @@ public class App extends javax.swing.JFrame
         jPanel2.add(jTextFieldSwitchingPeriodAnt4, gridBagConstraints);
 
         jTextFieldSwitchingPeriodAnt1.setText("jTextField2");
-        jTextFieldSwitchingPeriodAnt1.setToolTipText("Enter a value (200-60000) and press the \"Set\" button.");
+        jTextFieldSwitchingPeriodAnt1.setToolTipText("Enter a value (150-60000) and press the \"Set\" button.");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -493,7 +494,6 @@ public class App extends javax.swing.JFrame
         jDialogAbout.setTitle("About");
         jDialogAbout.setAlwaysOnTop(true);
         jDialogAbout.setModal(true);
-        jDialogAbout.setPreferredSize(new java.awt.Dimension(400, 300));
         jDialogAbout.setResizable(false);
         jDialogAbout.getContentPane().setLayout(new java.awt.GridBagLayout());
 
@@ -577,7 +577,8 @@ public class App extends javax.swing.JFrame
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle(PROGRAM_NAME+" v."+PROGRAM_VERSION);
-        setMinimumSize(new java.awt.Dimension(200, 200));
+        setMinimumSize(new java.awt.Dimension(50, 50));
+        setPreferredSize(new java.awt.Dimension(200, 200));
         addWindowListener(new java.awt.event.WindowAdapter()
         {
             public void windowOpened(java.awt.event.WindowEvent evt)
@@ -590,6 +591,32 @@ public class App extends javax.swing.JFrame
             }
         });
         getContentPane().setLayout(new java.awt.GridBagLayout());
+
+        jPanel6.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel6.setLayout(new java.awt.GridBagLayout());
+
+        jLabelSerialComm.setText("Serial Comm:");
+        jLabelSerialComm.setMinimumSize(null);
+        jLabelSerialComm.setPreferredSize(null);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        jPanel6.add(jLabelSerialComm, gridBagConstraints);
+        jLabelSerialComm.getAccessibleContext().setAccessibleName("jLabelSerialComm");
+        jLabelSerialComm.getAccessibleContext().setAccessibleDescription("");
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        getContentPane().add(jPanel6, gridBagConstraints);
 
         jPanel11.setBorder(javax.swing.BorderFactory.createTitledBorder("Antennas"));
         jPanel11.setLayout(new java.awt.GridBagLayout());
@@ -607,7 +634,7 @@ public class App extends javax.swing.JFrame
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 1, 0);
         jPanel11.add(jToggleButtonAnt1, gridBagConstraints);
 
         buttonGroupAntennas.add(jToggleButtonAnt2);
@@ -625,7 +652,7 @@ public class App extends javax.swing.JFrame
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 1, 0);
         jPanel11.add(jToggleButtonAnt2, gridBagConstraints);
 
         buttonGroupAntennas.add(jToggleButtonAnt3);
@@ -643,7 +670,7 @@ public class App extends javax.swing.JFrame
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 1, 0);
         jPanel11.add(jToggleButtonAnt3, gridBagConstraints);
 
         buttonGroupAntennas.add(jToggleButtonAnt4);
@@ -661,7 +688,6 @@ public class App extends javax.swing.JFrame
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel11.add(jToggleButtonAnt4, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -671,23 +697,10 @@ public class App extends javax.swing.JFrame
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(12, 0, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(3, 0, 0, 0);
         getContentPane().add(jPanel11, gridBagConstraints);
 
         jPanel12.setLayout(new java.awt.GridBagLayout());
-
-        jLabelSerialComm.setText("Serial Comm:");
-        jLabelSerialComm.setMinimumSize(null);
-        jLabelSerialComm.setPreferredSize(null);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 0.1;
-        jPanel12.add(jLabelSerialComm, gridBagConstraints);
-        jLabelSerialComm.getAccessibleContext().setAccessibleName("jLabelSerialComm");
-        jLabelSerialComm.getAccessibleContext().setAccessibleDescription("");
 
         jCheckBoxPeriodicSwitching.setText("Periodic switching");
         jCheckBoxPeriodicSwitching.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -702,7 +715,6 @@ public class App extends javax.swing.JFrame
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
         jPanel12.add(jCheckBoxPeriodicSwitching, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -711,8 +723,8 @@ public class App extends javax.swing.JFrame
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 0.2;
-        gridBagConstraints.insets = new java.awt.Insets(6, 0, 0, 0);
+        gridBagConstraints.weighty = 0.3;
+        gridBagConstraints.insets = new java.awt.Insets(3, 0, 0, 0);
         getContentPane().add(jPanel12, gridBagConstraints);
 
         fileMenu.setMnemonic('f');
@@ -850,7 +862,6 @@ public class App extends javax.swing.JFrame
       {
           jDialogPeriodicSwitching.setVisible(false);
       }
-
   }//GEN-LAST:event_jCheckBoxPeriodicSwitchingActionPerformed
 
     private void jButtonSetPeriodSwitchingActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonSetPeriodSwitchingActionPerformed
@@ -984,6 +995,7 @@ public class App extends javax.swing.JFrame
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextFieldAnt1Label;
@@ -1246,7 +1258,6 @@ public class App extends javax.swing.JFrame
         {
             int next;
             
-            // find next antenna tha
             next = findNextCheckmarkedAntenna(appSettings.getLastUsedAntenna());
 
             // Start timer for the required period

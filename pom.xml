@@ -4,8 +4,8 @@
 
   <groupId>org.lz1aq</groupId>
   <artifactId>aaacontroller</artifactId>
-  <version>1.0</version>
-  <description>Initial version</description>
+  <version>1.1</version>
+  <description>GUI optimization: less space between buttons and few more things.</description>
   <packaging>jar</packaging>
   <name>aaacontroller</name>
   <url>www.active-antenna.eu</url>
